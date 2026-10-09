@@ -1,0 +1,109 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: demo-app
+
+  # ==================== 数据源 ====================
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/personal_blog?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+
+    # 连接池：Spring Boot 2.x+ 默认 HikariCP，用 type 切换
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: DemoHikariPool
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 600000          # 10 分钟
+      max-lifetime: 1800000         # 30 分钟，需小于 MySQL wait_timeout
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+      # auto-commit: true
+  # ==================== 日志（YAML 能配的部分） ====================
+  # ⚠️ 这里只能配「级别 / 文件路径 / 输出格式」，Appender 与滚动策略做不到，
+  #    那些必须放到 logback-spring.xml 或 log4j2-spring.xml 里（见第 3 节）
+logging:
+  level:
+    root: info
+    # 关键：包名必须与 Mapper 接口全限定名一致，才会打印 SQL
+    com.example.mapper: debug
+    com.example: debug
+    org.springframework: warn
+    org.mybatis: info
+    org.apache.ibatis: info
+    java.sql: debug
+    java.sql.ResultSet: info
+    # MyBatis-Plus 用到了才开
+    com.baomidou.mybatisplus: debug
+  file:
+    name: logs/app.log          # 配了它才写文件（旧版是 logging.file）
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 30
+      total-size-cap: 2GB
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# ==================== MyBatis ====================
+mybatis:
+  # 1) 核心配置：这里的每一项对应 mybatis-config.xml 的 <settings>
+  configuration:
+    map-underscore-to-camel-case: true      # user_name -> userName
+    call-setters-on-nulls: true
+    cache-enabled: true
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+    use-generated-keys: true
+    default-statement-timeout: 30
+    default-fetch-size: 100
+    auto-mapping-behavior: partial          # none | partial | full
+    auto-mapping-unknown-column-behavior: warning   # none | warning | failing
+    jdbc-type-for-null: 'NULL'              # 注意：必须加引号，否则 YAML 解析成 null
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+  # 2) 类型别名包（对应 <typeAliases><package>）
+  type-aliases-package: com.example.entity
+
+  # 3) 类型处理器包（可选）
+  type-handlers-package: com.example.handler
+
+  # 4) 映射文件位置
+  mapper-locations: classpath*:/mapper/**/*.xml
+
+  # 5) 全局配置文件（可选）
+  #    ⚠️ config-location 与 configuration 互斥，同时存在会直接启动报错，
+  #       二选一：要么全部写在上面 configuration 里，要么全部写在 mybatis-config.xml 里
+  # config-location: classpath:mybatis-config.xml
+
+# ==================== MyBatis-Plus（用了 MP 才加这段） ====================
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.example.entity
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto                 # auto | assign_id | assign_uuid | input | none
+      logic-delete-field: deleted   # 逻辑删除字段名
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      table-underline: true         # 实体 UserInfo -> 表 user_info
+      insert-strategy: not_null     # not_null | not_empty | ignored
+      update-strategy: not_null
+      where-strategy: not_empty
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+# ==================== 分页插件（PageHelper，需要才加） ====================
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
