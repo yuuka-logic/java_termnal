@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.personal_blog.mapper.ArticleTagMapper">
+
+    <!-- 查询某篇文章的标签 -->
+    <select id="selectTagsByArticleId" resultType="com.example.personal_blog.entity.Tag">
+        SELECT t.id, t.name, t.slug, t.description, t.article_count,
+               t.created_at, t.updated_at, t.is_deleted
+        FROM `article_tag` at
+        INNER JOIN `tag` t ON t.id = at.tag_id
+        WHERE at.article_id = #{articleId} AND t.is_deleted = 0
+        ORDER BY t.id ASC
+    </select>
+
+    <!--
+      批量查询多篇文章的标签，返回扁平结构 (article_id, tag) 。
+      Service 按 articleId 分组后回填到各篇文章，一次查询解决列表页 N+1 问题。
+    -->
+    <select id="selectTagsByArticleIds" resultType="com.example.personal_blog.dto.TagBrief">
+        SELECT at.article_id AS article_id,
+               t.id          AS id,
+               t.name        AS name,
+               t.slug        AS slug
+        FROM `article_tag` at
+        INNER JOIN `tag` t ON t.id = at.tag_id
+        WHERE t.is_deleted = 0
+          AND at.article_id IN
+        <foreach collection="articleIds" item="aid" open="(" separator="," close=")">
+            #{aid}
+        </foreach>
+        ORDER BY at.article_id ASC, t.id ASC
+    </select>
+
+    <!-- 批量建立关联；主键 (article_id, tag_id) 冲突时跳过，保证重复提交不报错 -->
+    <insert id="batchInsert">
+        INSERT IGNORE INTO `article_tag` (article_id, tag_id)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.articleId}, #{item.tagId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByArticleId">
+        DELETE FROM `article_tag` WHERE article_id = #{articleId}
+    </delete>
+
+    <delete id="deleteByTagId">
+        DELETE FROM `article_tag` WHERE tag_id = #{tagId}
+    </delete>
+
+    <select id="countByTagId" resultType="int">
+        SELECT COUNT(*) FROM `article_tag` WHERE tag_id = #{tagId}
+    </select>
+
+</mapper>

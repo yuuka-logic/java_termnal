@@ -5,6 +5,12 @@ spring:
   application:
     name: demo-app
 
+  # 响应 JSON 忽略 null 字段：列表接口不查正文，响应里就不会出现 "content": null 之类的空占位
+  jackson:
+    default-property-inclusion: non_null
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+
   # ==================== 数据源 ====================
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

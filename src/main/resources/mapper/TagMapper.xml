@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.personal_blog.mapper.TagMapper">
+
+    <sql id="Base_Column_List">
+        id, name, slug, description, article_count, created_at, updated_at, is_deleted
+    </sql>
+
+    <select id="selectPage" resultType="com.example.personal_blog.entity.Tag">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `tag`
+        WHERE is_deleted = 0
+        <if test="keyword != null and keyword != ''">
+            AND (name LIKE CONCAT('%', #{keyword}, '%')
+                 OR slug LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        ORDER BY article_count DESC, id ASC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countByCondition" resultType="long">
+        SELECT COUNT(*) FROM `tag`
+        WHERE is_deleted = 0
+        <if test="keyword != null and keyword != ''">
+            AND (name LIKE CONCAT('%', #{keyword}, '%')
+                 OR slug LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+    </select>
+
+    <select id="selectAllOrderByCount" resultType="com.example.personal_blog.entity.Tag">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `tag` WHERE is_deleted = 0
+        ORDER BY article_count DESC, id ASC
+    </select>
+
+    <select id="selectById" resultType="com.example.personal_blog.entity.Tag">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `tag` WHERE id = #{id} AND is_deleted = 0
+    </select>
+
+    <select id="selectByName" resultType="com.example.personal_blog.entity.Tag">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `tag` WHERE name = #{name} AND is_deleted = 0
+    </select>
+
+    <select id="countByName" resultType="int">
+        SELECT COUNT(*) FROM `tag`
+        WHERE name = #{name} AND is_deleted = 0
+        <if test="excludeId != null">AND id != #{excludeId}</if>
+    </select>
+
+    <select id="countBySlug" resultType="int">
+        SELECT COUNT(*) FROM `tag`
+        WHERE slug = #{slug} AND is_deleted = 0
+        <if test="excludeId != null">AND id != #{excludeId}</if>
+    </select>
+
+    <!-- 删除前校验：统计该标签的所有关联（含草稿），有关联就不允许删 -->
+    <select id="countArticles" resultType="int">
+        SELECT COUNT(*) FROM `article_tag` WHERE tag_id = #{tagId}
+    </select>
+
+    <insert id="insert" parameterType="com.example.personal_blog.entity.Tag"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `tag` (name, slug, description, article_count, is_deleted)
+        VALUES (#{name}, #{slug}, #{description}, 0, 0)
+    </insert>
+
+    <update id="updateById" parameterType="com.example.personal_blog.entity.Tag">
+        UPDATE `tag`
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="slug != null and slug != ''">slug = #{slug},</if>
+            <if test="description != null">description = #{description},</if>
+        </set>
+        WHERE id = #{id} AND is_deleted = 0
+    </update>
+
+    <!-- 重算单个标签的文章数：只统计"已发布"的文章，与前台标签云展示口径一致 -->
+    <update id="refreshArticleCount">
+        UPDATE `tag` t
+        SET t.article_count = (
+            SELECT COUNT(*) FROM `article_tag` at
+            INNER JOIN `article` a ON a.id = at.article_id
+            WHERE at.tag_id = #{tagId} AND a.status = 1
+        )
+        WHERE t.id = #{tagId}
+    </update>
+
+    <!-- 全量重算，用于数据修复或定时任务 -->
+    <update id="refreshAllArticleCounts">
+        UPDATE `tag` t
+        SET t.article_count = (
+            SELECT COUNT(*) FROM `article_tag` at
+            INNER JOIN `article` a ON a.id = at.article_id
+            WHERE at.tag_id = t.id AND a.status = 1
+        )
+        WHERE t.is_deleted = 0
+    </update>
+
+    <update id="softDeleteById">
+        UPDATE `tag` SET is_deleted = 1
+        WHERE id = #{id} AND is_deleted = 0
+    </update>
+
+</mapper>

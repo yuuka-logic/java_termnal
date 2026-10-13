@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.personal_blog.mapper.OperationLogMapper">
+
+    <sql id="Base_Column_List">
+        id, user_id, username, module, operation, description,
+        request_method, request_url, request_params, ip, user_agent,
+        duration, status, error_msg, created_at
+    </sql>
+
+    <sql id="Where_Clause">
+        <where>
+            <if test="username != null and username != ''">
+                AND username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="module != null and module != ''">AND module = #{module}</if>
+            <if test="operation != null and operation != ''">AND operation = #{operation}</if>
+            <if test="status != null">AND status = #{status}</if>
+            <if test="startTime != null">AND created_at &gt;= #{startTime}</if>
+            <if test="endTime != null">AND created_at &lt;= #{endTime}</if>
+        </where>
+    </sql>
+
+    <select id="selectPage" resultType="com.example.personal_blog.entity.OperationLog">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `operation_log`
+        <include refid="Where_Clause"/>
+        ORDER BY id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countByCondition" resultType="long">
+        SELECT COUNT(*) FROM `operation_log`
+        <include refid="Where_Clause"/>
+    </select>
+
+    <select id="selectById" resultType="com.example.personal_blog.entity.OperationLog">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `operation_log` WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.example.personal_blog.entity.OperationLog"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `operation_log`
+            (user_id, username, module, operation, description,
+             request_method, request_url, request_params, ip, user_agent,
+             duration, status, error_msg)
+        VALUES
+            (#{userId}, #{username}, #{module}, #{operation}, #{description},
+             #{requestMethod}, #{requestUrl}, #{requestParams}, #{ip}, #{userAgent},
+             #{duration}, #{status}, #{errorMsg})
+    </insert>
+
+    <delete id="deleteBefore">
+        DELETE FROM `operation_log` WHERE created_at &lt; #{time}
+    </delete>
+
+    <delete id="truncateAll">
+        DELETE FROM `operation_log`
+    </delete>
+
+    <select id="countGroupByModule" resultType="java.util.Map">
+        SELECT module AS module, COUNT(*) AS total
+        FROM `operation_log`
+        <where>
+            <if test="startTime != null">AND created_at &gt;= #{startTime}</if>
+        </where>
+        GROUP BY module
+        ORDER BY total DESC
+    </select>
+
+</mapper>
