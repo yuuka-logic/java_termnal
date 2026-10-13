@@ -62,8 +62,9 @@ public class UserController {
     @PostMapping
     public Result<User> create(@RequestBody User user) {
         userService.create(user);
-        // 返回带自增 id 的实体，注意 password 因 WRITE_ONLY 不会出现在响应里
-        return Result.ok("新增成功", user);
+        // 回查一次：MyBatis 只回填自增 id，created_at/updated_at 是数据库默认值生成的，
+        // 不回查的话响应里这两个字段会是 null。password 因 WRITE_ONLY 不会出现在响应里。
+        return Result.ok("新增成功", userService.getById(user.getId()));
     }
 
     /** 修改用户（只更新传入的字段） */

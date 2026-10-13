@@ -3,6 +3,8 @@ package com.example.personal_blog.service;
 import com.example.personal_blog.common.BusinessException;
 import com.example.personal_blog.common.Result;
 import com.example.personal_blog.entity.User;
+import com.example.personal_blog.mapper.AnnouncementMapper;
+import com.example.personal_blog.mapper.ArticleMapper;
 import com.example.personal_blog.mapper.UserMapper;
 import com.example.personal_blog.util.PasswordUtil;
 import org.springframework.stereotype.Service;
@@ -19,10 +21,16 @@ import java.util.List;
 public class UserService {
 
     private final UserMapper userMapper;
+    private final ArticleMapper articleMapper;
+    private final AnnouncementMapper announcementMapper;
 
     /** 构造器注入：依赖不可变，也便于单元测试 */
-    public UserService(UserMapper userMapper) {
+    public UserService(UserMapper userMapper,
+                       ArticleMapper articleMapper,
+                       AnnouncementMapper announcementMapper) {
         this.userMapper = userMapper;
+        this.articleMapper = articleMapper;
+        this.announcementMapper = announcementMapper;
     }
 
     /**
@@ -127,11 +135,19 @@ public class UserService {
         return userMapper.updateById(user);
     }
 
-    /** 逻辑删除 */
+    /** 逻辑删除。仍写有文章或公告的用户不允许删除，否则会产生无主数据 */
     @Transactional(rollbackFor = Exception.class)
     public int delete(Long id) {
         if (id == null || userMapper.selectById(id) == null) {
             throw new BusinessException(404, "用户不存在：id=" + id);
+        }
+        int articles = articleMapper.countByAuthor(id);
+        if (articles > 0) {
+            throw new BusinessException(409, "该用户还有 " + articles + " 篇文章，无法删除");
+        }
+        int announcements = announcementMapper.countByPublisher(id);
+        if (announcements > 0) {
+            throw new BusinessException(409, "该用户还发布了 " + announcements + " 条公告，无法删除");
         }
         return userMapper.softDeleteById(id);
     }
