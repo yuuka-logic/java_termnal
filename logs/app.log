@@ -1,44 +1,36 @@
-2026-10-09 09:55:50.046 [main] INFO  c.e.p.PersonalBlogApplication - Starting PersonalBlogApplication using Java 1.8.0_431 on DESKTOP-O68DBL1 with PID 13336 (C:\Users\Administrator\Desktop\Personal_blog\target\classes started by Administrator in C:\Users\Administrator\Desktop\Personal_blog)
-2026-10-09 09:55:50.048 [main] DEBUG c.e.p.PersonalBlogApplication - Running with Spring Boot v2.6.13, Spring v5.3.23
-2026-10-09 09:55:50.048 [main] INFO  c.e.p.PersonalBlogApplication - No active profile set, falling back to 1 default profile: "default"
-2026-10-09 09:55:50.543 [main] WARN  o.m.s.mapper.ClassPathMapperScanner - No MyBatis mapper was found in '[com.example.personal_blog]' package. Please check your configuration.
-2026-10-09 09:55:50.801 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-10-09 09:55:50.801 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.68]
-2026-10-09 09:55:50.913 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-10-09 09:55:51.148 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration': Unsatisfied dependency expressed through constructor parameter 0; nested exception is org.springframework.boot.context.properties.ConfigurationPropertiesBindException: Error creating bean with name 'mybatis-org.mybatis.spring.boot.autoconfigure.MybatisProperties': Could not bind properties to 'MybatisProperties' : prefix=mybatis, ignoreInvalidFields=false, ignoreUnknownFields=true; nested exception is org.springframework.boot.context.properties.bind.BindException: Failed to bind properties under 'mybatis.configuration.proxy-factory' to org.apache.ibatis.executor.loader.ProxyFactory
-2026-10-09 09:55:51.150 [main] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
-2026-10-09 09:55:51.174 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-Failed to bind properties under 'mybatis.configuration.proxy-factory' to org.apache.ibatis.executor.loader.ProxyFactory:
-
-    Property: mybatis.configuration.proxy-factory
-    Value: "org.apache.ibatis.executor.loader.javassist.JavassistProxyFactory"
-    Origin: class path resource [application.yaml] - 90:20
-    Reason: org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [java.lang.String] to type [org.apache.ibatis.executor.loader.ProxyFactory]
-
-Action:
-
-Update your application's configuration
-
-2026-10-09 09:57:06.329 [main] INFO  c.e.p.PersonalBlogApplication - Starting PersonalBlogApplication using Java 1.8.0_431 on DESKTOP-O68DBL1 with PID 12784 (C:\Users\Administrator\Desktop\Personal_blog\target\classes started by Administrator in C:\Users\Administrator\Desktop\Personal_blog)
-2026-10-09 09:57:06.341 [main] DEBUG c.e.p.PersonalBlogApplication - Running with Spring Boot v2.6.13, Spring v5.3.23
-2026-10-09 09:57:06.341 [main] INFO  c.e.p.PersonalBlogApplication - No active profile set, falling back to 1 default profile: "default"
-2026-10-09 09:57:06.869 [main] WARN  o.m.s.mapper.ClassPathMapperScanner - No MyBatis mapper was found in '[com.example.personal_blog]' package. Please check your configuration.
-2026-10-09 09:57:07.217 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-10-09 09:57:07.217 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.68]
-2026-10-09 09:57:07.621 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-10-09 09:57:08.149 [main] INFO  c.e.p.PersonalBlogApplication - Started PersonalBlogApplication in 2.476 seconds (JVM running for 5.625)
-2026-10-09 09:57:13.464 [main] INFO  c.e.p.PersonalBlogApplication - Starting PersonalBlogApplication using Java 1.8.0_431 on DESKTOP-O68DBL1 with PID 17816 (C:\Users\Administrator\Desktop\Personal_blog\target\classes started by Administrator in C:\Users\Administrator\Desktop\Personal_blog)
-2026-10-09 09:57:13.466 [main] DEBUG c.e.p.PersonalBlogApplication - Running with Spring Boot v2.6.13, Spring v5.3.23
-2026-10-09 09:57:13.466 [main] INFO  c.e.p.PersonalBlogApplication - No active profile set, falling back to 1 default profile: "default"
-2026-10-09 09:57:13.825 [main] WARN  o.m.s.mapper.ClassPathMapperScanner - No MyBatis mapper was found in '[com.example.personal_blog]' package. Please check your configuration.
-2026-10-09 09:57:14.042 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
-2026-10-09 09:57:14.042 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.68]
-2026-10-09 09:57:14.139 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
-2026-10-09 09:57:14.421 [main] INFO  c.e.p.PersonalBlogApplication - Started PersonalBlogApplication in 1.269 seconds (JVM running for 1.654)
+2026-10-13 08:49:53.015 [main] INFO  c.e.p.PersonalBlogApplication - Starting PersonalBlogApplication using Java 1.8.0_431 on DESKTOP-9TRBVDK with PID 10352 (C:\Users\admin\Desktop\myblog\target\classes started by admin in C:\Users\admin\Desktop\myblog)
+2026-10-13 08:49:53.036 [main] DEBUG c.e.p.PersonalBlogApplication - Running with Spring Boot v2.6.13, Spring v5.3.23
+2026-10-13 08:49:53.037 [main] INFO  c.e.p.PersonalBlogApplication - No active profile set, falling back to 1 default profile: "default"
+2026-10-13 08:49:53.468 [main] WARN  o.m.s.mapper.ClassPathMapperScanner - No MyBatis mapper was found in '[com.example.personal_blog]' package. Please check your configuration.
+2026-10-13 08:49:53.699 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-10-13 08:49:53.699 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.68]
+2026-10-13 08:49:53.790 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-10-13 08:49:54.105 [main] INFO  c.e.p.PersonalBlogApplication - Started PersonalBlogApplication in 1.474 seconds (JVM running for 1.899)
+2026-10-13 09:09:22.129 [main] INFO  c.e.p.PersonalBlogApplication - Starting PersonalBlogApplication using Java 1.8.0_431 on DESKTOP-9TRBVDK with PID 12800 (C:\Users\admin\Desktop\myblog\target\classes started by admin in C:\Users\admin\Desktop\myblog)
+2026-10-13 09:09:22.131 [main] DEBUG c.e.p.PersonalBlogApplication - Running with Spring Boot v2.6.13, Spring v5.3.23
+2026-10-13 09:09:22.132 [main] INFO  c.e.p.PersonalBlogApplication - No active profile set, falling back to 1 default profile: "default"
+2026-10-13 09:09:22.708 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-10-13 09:09:22.708 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.68]
+2026-10-13 09:09:22.819 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-10-13 09:09:23.236 [main] INFO  c.e.p.PersonalBlogApplication - Started PersonalBlogApplication in 1.397 seconds (JVM running for 1.75)
+2026-10-13 09:25:42.604 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-13 09:25:42.661 [http-nio-8080-exec-1] INFO  com.zaxxer.hikari.HikariDataSource - DemoHikariPool - Starting...
+2026-10-13 09:25:42.748 [http-nio-8080-exec-1] INFO  com.zaxxer.hikari.HikariDataSource - DemoHikariPool - Start completed.
+2026-10-13 09:25:42.773 [http-nio-8080-exec-1] DEBUG c.e.p.m.UserMapper.countByUsername - ==>  Preparing: SELECT COUNT(*) FROM `user` WHERE username = ? AND is_deleted = 0
+2026-10-13 09:25:42.783 [http-nio-8080-exec-1] DEBUG c.e.p.m.UserMapper.countByUsername - ==> Parameters: testuser02(String)
+2026-10-13 09:25:42.792 [http-nio-8080-exec-1] DEBUG c.e.p.m.UserMapper.countByUsername - <==      Total: 1
+2026-10-13 09:25:42.795 [http-nio-8080-exec-1] DEBUG c.e.p.mapper.UserMapper.countByEmail - ==>  Preparing: SELECT COUNT(*) FROM `user` WHERE email = ? AND is_deleted = 0
+2026-10-13 09:25:42.795 [http-nio-8080-exec-1] DEBUG c.e.p.mapper.UserMapper.countByEmail - ==> Parameters: pm02@blog.com(String)
+2026-10-13 09:25:42.796 [http-nio-8080-exec-1] DEBUG c.e.p.mapper.UserMapper.countByEmail - <==      Total: 1
+2026-10-13 09:25:42.846 [http-nio-8080-exec-1] DEBUG c.e.p.mapper.UserMapper.insert - ==>  Preparing: INSERT INTO `user` (username, password, nickname, email, phone, avatar, gender, bio, role, status, is_deleted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+2026-10-13 09:25:42.847 [http-nio-8080-exec-1] DEBUG c.e.p.mapper.UserMapper.insert - ==> Parameters: testuser02(String), 10000$qcMRFn486z2rvrRLvR42MA==$ZqI0Sq3d2Li1IWhSaW0hcPzuTrgMCOLd96ZuARgEK0Y=(String), 邮递员测试(String), pm02@blog.com(String), 13900000002(String), https://example.com/a.png(String), 1(Integer), 用 Postman 新增的测试账号(String), 2(Integer), 1(Integer)
+2026-10-13 09:25:42.848 [http-nio-8080-exec-1] DEBUG c.e.p.mapper.UserMapper.insert - <==    Updates: 1
+2026-10-13 09:26:59.910 [http-nio-8080-exec-3] DEBUG c.e.p.m.UserMapper.countByCondition - ==>  Preparing: SELECT COUNT(*) FROM `user` WHERE is_deleted = 0
+2026-10-13 09:26:59.911 [http-nio-8080-exec-3] DEBUG c.e.p.m.UserMapper.countByCondition - ==> Parameters: 
+2026-10-13 09:26:59.912 [http-nio-8080-exec-3] DEBUG c.e.p.m.UserMapper.countByCondition - <==      Total: 1
+2026-10-13 09:26:59.913 [http-nio-8080-exec-3] DEBUG c.e.p.mapper.UserMapper.selectPage - ==>  Preparing: SELECT id, username, password, nickname, email, phone, avatar, gender, bio, role, status, last_login_time, last_login_ip, created_at, updated_at, is_deleted FROM `user` WHERE is_deleted = 0 ORDER BY id DESC LIMIT ? OFFSET ?
+2026-10-13 09:26:59.914 [http-nio-8080-exec-3] DEBUG c.e.p.mapper.UserMapper.selectPage - ==> Parameters: 10(Integer), 0(Integer)
+2026-10-13 09:26:59.921 [http-nio-8080-exec-3] DEBUG c.e.p.mapper.UserMapper.selectPage - <==      Total: 8
+2026-10-13 09:27:32.285 [http-nio-8080-exec-4] DEBUG c.e.p.mapper.UserMapper.selectById - ==>  Preparing: SELECT id, username, password, nickname, email, phone, avatar, gender, bio, role, status, last_login_time, last_login_ip, created_at, updated_at, is_deleted FROM `user` WHERE id = ? AND is_deleted = 0
+2026-10-13 09:27:32.286 [http-nio-8080-exec-4] DEBUG c.e.p.mapper.UserMapper.selectById - ==> Parameters: 1(Long)
+2026-10-13 09:27:32.287 [http-nio-8080-exec-4] DEBUG c.e.p.mapper.UserMapper.selectById - <==      Total: 1

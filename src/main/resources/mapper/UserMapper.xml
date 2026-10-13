@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.personal_blog.mapper.UserMapper">
+
+    <!--
+      user 是 MySQL 保留字，所有 SQL 里都必须用反引号包起来。
+      所有查询都带 is_deleted = 0，实现逻辑删除隔离。
+    -->
+
+    <!-- 公共列 -->
+    <sql id="Base_Column_List">
+        id, username, password, nickname, email, phone, avatar,
+        gender, bio, role, status, last_login_time, last_login_ip,
+        created_at, updated_at, is_deleted
+    </sql>
+
+    <!-- 分页列表：keyword 模糊匹配 用户名/昵称/邮箱 -->
+    <select id="selectPage" resultType="com.example.personal_blog.entity.User">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `user`
+        WHERE is_deleted = 0
+        <if test="keyword != null and keyword != ''">
+            AND (username LIKE CONCAT('%', #{keyword}, '%')
+                 OR nickname LIKE CONCAT('%', #{keyword}, '%')
+                 OR email LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+        ORDER BY id DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countByCondition" resultType="long">
+        SELECT COUNT(*)
+        FROM `user`
+        WHERE is_deleted = 0
+        <if test="keyword != null and keyword != ''">
+            AND (username LIKE CONCAT('%', #{keyword}, '%')
+                 OR nickname LIKE CONCAT('%', #{keyword}, '%')
+                 OR email LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+    </select>
+
+    <select id="selectById" resultType="com.example.personal_blog.entity.User">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `user`
+        WHERE id = #{id} AND is_deleted = 0
+    </select>
+
+    <select id="selectByUsername" resultType="com.example.personal_blog.entity.User">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `user`
+        WHERE username = #{username} AND is_deleted = 0
+    </select>
+
+    <select id="countByUsername" resultType="int">
+        SELECT COUNT(*) FROM `user`
+        WHERE username = #{username} AND is_deleted = 0
+        <if test="excludeId != null">
+            AND id != #{excludeId}
+        </if>
+    </select>
+
+    <select id="countByEmail" resultType="int">
+        SELECT COUNT(*) FROM `user`
+        WHERE email = #{email} AND is_deleted = 0
+        <if test="excludeId != null">
+            AND id != #{excludeId}
+        </if>
+    </select>
+
+    <!-- 新增：useGeneratedKeys 把自增主键回填到实体 -->
+    <insert id="insert" parameterType="com.example.personal_blog.entity.User"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `user`
+            (username, password, nickname, email, phone, avatar,
+             gender, bio, role, status, is_deleted)
+        VALUES
+            (#{username}, #{password}, #{nickname}, #{email}, #{phone}, #{avatar},
+             #{gender}, #{bio}, #{role}, #{status}, 0)
+    </insert>
+
+    <!-- 动态更新：只更新传入的非空字段，避免把未传字段覆盖成 null -->
+    <update id="updateById" parameterType="com.example.personal_blog.entity.User">
+        UPDATE `user`
+        <set>
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="bio != null">bio = #{bio},</if>
+            <if test="role != null">role = #{role},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
+        WHERE id = #{id} AND is_deleted = 0
+    </update>
+
+    <update id="updateStatus">
+        UPDATE `user` SET status = #{status}
+        WHERE id = #{id} AND is_deleted = 0
+    </update>
+
+    <update id="updatePassword">
+        UPDATE `user` SET password = #{password}
+        WHERE id = #{id} AND is_deleted = 0
+    </update>
+
+    <update id="updateLoginInfo">
+        UPDATE `user`
+        SET last_login_time = NOW(), last_login_ip = #{ip}
+        WHERE id = #{id} AND is_deleted = 0
+    </update>
+
+    <!-- 逻辑删除 -->
+    <update id="softDeleteById">
+        UPDATE `user` SET is_deleted = 1
+        WHERE id = #{id} AND is_deleted = 0
+    </update>
+
+</mapper>
